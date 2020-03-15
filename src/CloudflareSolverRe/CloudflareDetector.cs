@@ -16,7 +16,7 @@ namespace CloudflareSolverRe
     {
         private static readonly IEnumerable<string> CloudflareServerNames = new[] { "cloudflare", "cloudflare-nginx" };
 
-        private static readonly SemaphoreLocker _locker = new SemaphoreLocker();
+        //private static readonly SemaphoreLocker _locker = new SemaphoreLocker();
 
         /// <summary>
         /// Checks if the response declaring that the website is protected by cloudflare.
@@ -53,14 +53,14 @@ namespace CloudflareSolverRe
         {
             DetectResult result = default(DetectResult);
 
-            await _locker.LockAsync(async () =>
-            {
+            //await _locker.LockAsync(async () =>
+            //{
                 var cloudflareHandler = new CloudflareHandler(httpClientHandler);
 
                 result = await Detect(httpClient, cloudflareHandler, targetUri, requireHttps);
 
                 //cloudflareHandler.Dispose();
-            });
+            //});
 
             return result;
         }
@@ -102,8 +102,8 @@ namespace CloudflareSolverRe
         {
             DetectResult detectResult = default(DetectResult);
 
-            await _locker.LockAsync(async () =>
-            {
+            //await _locker.LockAsync(async () =>
+            //{
                 if (!requireHttps)
                     targetUri = targetUri.ForceHttp();
 
@@ -115,7 +115,7 @@ namespace CloudflareSolverRe
                     detectResult = await Detect(httpClient, targetUri);
                     detectResult.SupportsHttp = false;
                 }
-            });
+            //});
 
             return detectResult;
         }

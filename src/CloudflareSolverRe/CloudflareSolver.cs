@@ -16,7 +16,7 @@ namespace CloudflareSolverRe
 {
     public class CloudflareSolver : ICloudflareSolver
     {
-        private static readonly SemaphoreLocker _locker = new SemaphoreLocker();
+        private readonly SemaphoreLocker _locker = new SemaphoreLocker();
 
         /// <summary>
         /// The default number of retries, if clearance fails.
