@@ -57,13 +57,9 @@ namespace CloudflareSolverRe
         {
             try
             {
-                if (HttpClientHandler.AllowAutoRedirect)
-                    HttpClientHandler.AllowAutoRedirect = false;
-
-                if (HttpClientHandler.AutomaticDecompression != (DecompressionMethods.GZip | DecompressionMethods.Deflate))
-                    HttpClientHandler.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+                HttpClientHandler.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
             }
-            catch (Exception) { }
+            catch { }
         }
 
         private void PrepareHttpHeaders(HttpRequestMessage request)
