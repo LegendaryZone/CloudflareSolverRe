@@ -162,6 +162,34 @@ namespace CloudflareSolverRe
         /// Solves cloudflare challenge protecting a specific website.
         /// </summary>
         /// <param name="httpClient">HttpClient to use in challenge solving process.</param>
+        /// <param name="httpClientHandler">HttpClientHandler of the HttpClient.</param>
+        /// <param name="siteUrl">Uri of the website.</param>
+        /// <param name="userAgent">The user-agent which will be used to solve the challenge.</param>
+        /// <param name="cancellationToken">CancellationToken to contol solving operation cancelling.</param>
+        public async Task<SolveResult> Solve(HttpClient httpClient, HttpClientHandler httpClientHandler, Uri siteUrl, string userAgent, [Optional]CancellationToken cancellationToken)
+        {
+            SolveResult result = default(SolveResult);
+
+            await _locker.LockAsync(async () =>
+            {
+                this.userAgent = userAgent;
+                var cloudflareHandler = new CloudflareHandler(httpClientHandler, userAgent);
+                result = await Solve(httpClient, cloudflareHandler, siteUrl, cancellationToken);
+
+                if (result.UserAgent != null)
+                {
+                    httpClient.DefaultRequestHeaders.UserAgent.Clear();
+                    httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(result.UserAgent);
+                }
+            });
+
+            return result;
+        }
+
+        /// <summary>
+        /// Solves cloudflare challenge protecting a specific website.
+        /// </summary>
+        /// <param name="httpClient">HttpClient to use in challenge solving process.</param>
         /// <param name="httpMessageHandler">HttpMessageHandler of the HttpClient.</param>
         /// <param name="siteUrl">Uri of the website.</param>
         /// <param name="cancellationToken">CancellationToken to contol solving operation cancelling.</param>
@@ -174,6 +202,34 @@ namespace CloudflareSolverRe
             {
                 userAgent = randomUserAgent ? Utils.GetGenerateRandomUserAgent() : defaultUserAgent;
                 var cloudflareHandler = new CloudflareHandler(httpMessageHandler, userAgent);
+                result = await Solve(httpClient, cloudflareHandler, siteUrl, cancellationToken);
+
+                if (result.UserAgent != null)
+                {
+                    httpClient.DefaultRequestHeaders.UserAgent.Clear();
+                    httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(result.UserAgent);
+                }
+            });
+
+            return result;
+        }
+
+        /// <summary>
+        /// Solves cloudflare challenge protecting a specific website.
+        /// </summary>
+        /// <param name="httpClient">HttpClient to use in challenge solving process.</param>
+        /// <param name="httpClientHandler">HttpClientHandler of the HttpClient.</param>
+        /// <param name="siteUrl">Uri of the website.</param>
+        /// <param name="cancellationToken">CancellationToken to contol solving operation cancelling.</param>
+        /// <param name="randomUserAgent">Use a new random user-agent.</param>
+        public async Task<SolveResult> Solve(HttpClient httpClient, HttpClientHandler httpClientHandler, Uri siteUrl, [Optional]CancellationToken cancellationToken, bool randomUserAgent = false)
+        {
+            SolveResult result = default(SolveResult);
+
+            await _locker.LockAsync(async () =>
+            {
+                userAgent = randomUserAgent ? Utils.GetGenerateRandomUserAgent() : defaultUserAgent;
+                var cloudflareHandler = new CloudflareHandler(httpClientHandler, userAgent);
                 result = await Solve(httpClient, cloudflareHandler, siteUrl, cancellationToken);
 
                 if (result.UserAgent != null)
