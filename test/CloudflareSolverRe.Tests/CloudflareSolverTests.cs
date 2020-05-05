@@ -1,4 +1,5 @@
-﻿using CloudflareSolverRe.CaptchaProviders;
+﻿using CaptchaSharp;
+using CaptchaSharp.Services;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Net;
@@ -39,7 +40,7 @@ namespace CloudflareSolverRe.Tests
             if (Settings.AntiCaptchaApiKey.Equals("YOUR_API_KEY"))
                 return;
 
-            var cf = new CloudflareSolver(new AntiCaptchaProvider(Settings.AntiCaptchaApiKey))
+            var cf = new CloudflareSolver(new AntiCaptchaService(Settings.AntiCaptchaApiKey))
             {
                 MaxTries = 2,
                 MaxCaptchaTries = 2
@@ -63,7 +64,7 @@ namespace CloudflareSolverRe.Tests
             if (Settings.TwoCaptchaApiKey.Equals("YOUR_API_KEY"))
                 return;
 
-            var cf = new CloudflareSolver(new TwoCaptchaProvider(Settings.TwoCaptchaApiKey))
+            var cf = new CloudflareSolver(new TwoCaptchaService(Settings.TwoCaptchaApiKey))
             {
                 MaxTries = 2,
                 MaxCaptchaTries = 2

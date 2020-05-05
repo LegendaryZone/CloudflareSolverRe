@@ -7,7 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\CloudflareSolverRe.Captcha\CloudflareSolverRe.Captcha.csproj" />
+    <PackageReference Include="CaptchaSharp" Version="1.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\CloudflareSolverRe\CloudflareSolverRe.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,4 @@
-﻿using CloudflareSolverRe.CaptchaProviders;
+﻿using CaptchaSharp;
 using CloudflareSolverRe.Constants;
 using CloudflareSolverRe.Types;
 using CloudflareSolverRe.Types.Captcha;
@@ -12,18 +12,18 @@ namespace CloudflareSolverRe.Solvers
 {
     internal class CaptchaChallengeSolver : ChallengeSolver
     {
-        private readonly ICaptchaProvider captchaProvider;
+        private readonly CaptchaService captchaProvider;
 
         private bool CaptchaSolvingEnabled => captchaProvider != null;
 
 
-        internal CaptchaChallengeSolver(HttpClient client, CloudflareHandler handler, Uri siteUrl, DetectResult detectResult, string userAgent, ICaptchaProvider captchaProvider)
+        internal CaptchaChallengeSolver(HttpClient client, CloudflareHandler handler, Uri siteUrl, DetectResult detectResult, string userAgent, CaptchaService captchaProvider)
             : base(client, handler, siteUrl, detectResult, userAgent)
         {
             this.captchaProvider = captchaProvider;
         }
 
-        internal CaptchaChallengeSolver(CloudflareHandler handler, Uri siteUrl, DetectResult detectResult, string userAgent, ICaptchaProvider captchaProvider)
+        internal CaptchaChallengeSolver(CloudflareHandler handler, Uri siteUrl, DetectResult detectResult, string userAgent, CaptchaService captchaProvider)
             : base(handler, siteUrl, detectResult, userAgent)
         {
             this.captchaProvider = captchaProvider;

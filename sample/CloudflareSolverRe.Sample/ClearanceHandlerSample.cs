@@ -1,4 +1,6 @@
-﻿using CloudflareSolverRe.CaptchaProviders;
+﻿using CaptchaSharp;
+using CaptchaSharp.Services;
+using CloudflareSolverRe;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -25,7 +27,7 @@ namespace CloudflareSolverRe.Sample
 
         public async static void Sample_2Captcha()
         {
-            var handler = new ClearanceHandler(new TwoCaptchaProvider("YOUR_API_KEY"))
+            var handler = new ClearanceHandler(new TwoCaptchaService("YOUR_API_KEY"))
             {
                 MaxTries = 5,
                 MaxCaptchaTries = 2
@@ -40,7 +42,7 @@ namespace CloudflareSolverRe.Sample
 
         public async static Task Sample_AntiCaptcha()
         {
-            var handler = new ClearanceHandler(new AntiCaptchaProvider("YOUR_API_KEY"))
+            var handler = new ClearanceHandler(new AntiCaptchaService("YOUR_API_KEY"))
             {
                 MaxTries = 5,
                 MaxCaptchaTries = 2

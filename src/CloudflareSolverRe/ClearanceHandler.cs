@@ -1,10 +1,9 @@
-﻿using CloudflareSolverRe.CaptchaProviders;
+﻿using CaptchaSharp;
 using CloudflareSolverRe.Constants;
 using CloudflareSolverRe.Exceptions;
 using CloudflareSolverRe.Extensions;
 using CloudflareSolverRe.Types;
 using CloudflareSolverRe.Utilities;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Runtime.InteropServices;
@@ -76,7 +75,7 @@ namespace CloudflareSolverRe
         /// </summary>
         /// <param name="captchaProvider">The captcha provider which is responsible for solving captcha challenges.</param>
         /// <param name="userAgent">The user-agent which will be used accross this session (null means random user-agent).</param>
-        public ClearanceHandler(ICaptchaProvider captchaProvider, [Optional]string userAgent) : this(new HttpClientHandler(), captchaProvider, userAgent) { }
+        public ClearanceHandler(CaptchaService captchaProvider, [Optional]string userAgent) : this(new HttpClientHandler(), captchaProvider, userAgent) { }
 
         /// <summary>
         /// Creates a new instance of the <see cref="ClearanceHandler"/> class with a specific inner handler and a captcha provider.
@@ -84,7 +83,7 @@ namespace CloudflareSolverRe
         /// <param name="innerHandler">The inner handler which is responsible for processing the HTTP response messages.</param>
         /// <param name="captchaProvider">The captcha provider which is responsible for solving captcha challenges.</param>
         /// <param name="userAgent">The user-agent which will be used accross this session (null means random user-agent).</param>
-        public ClearanceHandler(HttpMessageHandler innerHandler, ICaptchaProvider captchaProvider, [Optional]string userAgent) : base(innerHandler)
+        public ClearanceHandler(HttpMessageHandler innerHandler, CaptchaService captchaProvider, [Optional]string userAgent) : base(innerHandler)
         {
             _client = new HttpClient(_handler = new HttpClientHandler
             {

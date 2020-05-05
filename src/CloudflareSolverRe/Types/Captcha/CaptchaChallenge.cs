@@ -1,4 +1,4 @@
-﻿using CloudflareSolverRe.CaptchaProviders;
+﻿using CaptchaSharp;
 using System;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -7,7 +7,7 @@ namespace CloudflareSolverRe.Types.Captcha
 {
     public class CaptchaChallenge
     {
-        private static readonly Regex CaptchaFormRegex = new Regex(@"<form.+?action=""(?<action>\S+?)"".*?>.*?name=""r"" value=""(?<r>[^""]*?)"".*?data-ray=""(?<dataRay>\S+)"".*?fallback\?\w+?=(?<siteKey>\S+)""", RegexOptions.Singleline/* | RegexOptions.Compiled*/);
+        private static readonly Regex CaptchaFormRegex = new Regex(@"<form.+?action=""(?<action>\S+?)"".*?>.*?name=""r"" value=""(?<r>[^""]*?)"".*?data-ray=""(?<dataRay>\S+)"".*?data-sitekey=""(?<siteKey>\S+)""", RegexOptions.Singleline/* | RegexOptions.Compiled*/);
 
         public string Action { get; set; }
         public string R { get; set; }
@@ -29,9 +29,26 @@ namespace CloudflareSolverRe.Types.Captcha
             };
         }
 
-        public async Task<CaptchaSolveResult> Solve(ICaptchaProvider captchaProvider)
+        public async Task<CaptchaSolveResult> Solve(CaptchaService captchaProvider)
         {
-            return await captchaProvider.SolveCaptcha(SiteKey, SiteUrl.AbsoluteUri);
+            try
+            {
+                var result = await captchaProvider.SolveHCaptchaAsync(SiteKey, SiteUrl.AbsoluteUri);
+
+                return new CaptchaSolveResult
+                {
+                    Response = result.Response,
+                    Success = true
+                };
+            }
+            catch
+            {
+                return new CaptchaSolveResult
+                {
+                    Response = "",
+                    Success = false
+                };
+            }
         }
 
     }

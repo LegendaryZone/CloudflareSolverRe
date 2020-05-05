@@ -148,7 +148,7 @@ namespace CloudflareSolverRe
 
             if (response.StatusCode.Equals(HttpStatusCode.Forbidden))
             {
-                if (html.Contains("g-recaptcha"))
+                if (html.Contains("hcaptcha"))
                 {
                     return new DetectResult
                     {

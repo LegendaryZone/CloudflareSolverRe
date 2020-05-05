@@ -9,7 +9,7 @@ namespace CloudflareSolverRe.Types.Captcha
     public class CaptchaChallengeSolution : IEquatable<CaptchaChallengeSolution>
     {
         public string ClearancePage { get; }
-        public string RecaptchaResponse { get; }
+        public string HCaptchaResponse { get; }
         public string R { get; }
         public string Id { get; }
 
@@ -19,23 +19,25 @@ namespace CloudflareSolverRe.Types.Captcha
         {
             { "r", Uri.EscapeDataString(R) },
             { "id", Uri.EscapeDataString(Id) },
-            { "g-recaptcha-response", Uri.EscapeDataString(RecaptchaResponse)}
+            { "h-captcha-response", Uri.EscapeDataString(HCaptchaResponse) },
+            { "g-recaptcha-response", Uri.EscapeDataString(HCaptchaResponse) },
+            { "cf_captcha_kind", "h" }
         };
 
-        public CaptchaChallengeSolution(string clearancePage, string s, string id, string recaptchaResponse)
+        public CaptchaChallengeSolution(string clearancePage, string s, string id, string hcaptchaResponse)
         {
             ClearancePage = clearancePage;
             R = s;
             Id = id;
-            RecaptchaResponse = recaptchaResponse;
+            HCaptchaResponse = hcaptchaResponse;
         }
 
-        public CaptchaChallengeSolution(CaptchaChallenge challenge, string recaptchaResponse)
+        public CaptchaChallengeSolution(CaptchaChallenge challenge, string hcaptchaResponse)
         {
             ClearancePage = $"{challenge.SiteUrl.Scheme}://{challenge.SiteUrl.Host}{challenge.Action}";
             R = challenge.R;
             Id = "";
-            RecaptchaResponse = recaptchaResponse;
+            HCaptchaResponse = hcaptchaResponse;
         }
 
         public static bool operator ==(CaptchaChallengeSolution solution1, CaptchaChallengeSolution solution2) =>

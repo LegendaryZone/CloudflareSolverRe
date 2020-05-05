@@ -1,4 +1,4 @@
-﻿using CloudflareSolverRe.CaptchaProviders;
+﻿using CaptchaSharp;
 using CloudflareSolverRe.Constants;
 using CloudflareSolverRe.Extensions;
 using CloudflareSolverRe.Solvers;
@@ -29,7 +29,7 @@ namespace CloudflareSolverRe
         public static readonly int DefaultMaxCaptchaTries = 1;
 
 
-        private readonly ICaptchaProvider captchaProvider;
+        private readonly CaptchaService captchaProvider;
         private readonly string defaultUserAgent;
 
         private string userAgent;
@@ -64,7 +64,7 @@ namespace CloudflareSolverRe
 
         public CloudflareSolver([Optional]string userAgent) : this(null, userAgent) { }
 
-        public CloudflareSolver(ICaptchaProvider captchaProvider, [Optional]string userAgent)
+        public CloudflareSolver(CaptchaService captchaProvider, [Optional]string userAgent)
         {
             this.captchaProvider = captchaProvider;
             defaultUserAgent = userAgent ?? Utils.GetGenerateRandomUserAgent();
